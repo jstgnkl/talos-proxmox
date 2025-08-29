@@ -46,5 +46,6 @@ resource "proxmox_vm_qemu" "talos" {
 
   cpu {
     cores = 2
+    type = "host"
   }
 }
