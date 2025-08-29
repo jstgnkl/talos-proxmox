@@ -7,7 +7,16 @@ locals {
     "talos-worker-02"  = {}
     "talos-worker-03"  = {}
   }
+  
   talos_node_names = keys(local.talos_nodes)
+  ip_assignments = {
+    "talos-control-01" = "10.0.0.81"
+    "talos-control-02" = "10.0.0.82"
+    "talos-control-03" = "10.0.0.83"
+    "talos-worker-01"  = "10.0.0.91"
+    "talos-worker-02"  = "10.0.0.92"
+    "talos-worker-03"  = "10.0.0.93"
+  }
 }
 
 resource "proxmox_vm_qemu" "talos" {
@@ -22,6 +31,11 @@ resource "proxmox_vm_qemu" "talos" {
 
   disks {
     ide {
+      ide0 {
+        cloudinit {
+          storage = "local-lvm"
+        }
+      }
       ide2 {
         cdrom {
           iso = "DSM:iso/nocloud-amd64.iso"
@@ -38,11 +52,16 @@ resource "proxmox_vm_qemu" "talos" {
       }
     }
   }
+
   network {
     bridge = "vmbr0"
     id     = 0
     model  = "virtio"
   }
+
+  ipconfig0    = "ip=${local.ip_assignments[each.key]}/24,gw=10.0.0.1"
+  nameserver   = "10.0.0.250"
+  searchdomain = "zenety.nl"
 
   cpu {
     cores = 2
