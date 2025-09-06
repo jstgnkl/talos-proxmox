@@ -22,7 +22,8 @@ Talos Linux Image Factory
 
 Needed system extensions:
 
- ```customization:
+ ```
+customization:
     systemExtensions:
         officialExtensions:
             - siderolabs/btrfs
@@ -72,7 +73,8 @@ Cilium installation
 
 Cillium without kube-proxy but with Gateway API support
 
-```cilium install \
+```bash
+cilium install \
     --set ipam.mode=kubernetes \
     --set kubeProxyReplacement=true \
     --set securityContext.capabilities.ciliumAgent="{CHOWN,KILL,NET_ADMIN,NET_RAW,IPC_LOCK,SYS_ADMIN,SYS_RESOURCE,DAC_OVERRIDE,FOWNER,SETGID,SETUID}" \
